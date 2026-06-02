@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getPesaPalToken, getTransactionStatus } from '@/lib/pesapal'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { sendPaymentReceived, sendNewOrderAdmin, sendOrderConfirmation } from '@/lib/email'
 
 export async function GET(req: NextRequest) {
   try {
@@ -15,7 +16,6 @@ export async function GET(req: NextRequest) {
 
     const token = await getPesaPalToken()
     const status = await getTransactionStatus(token, orderTrackingId)
-
     const paymentStatus = status.payment_status_description?.toLowerCase() === 'completed' ? 'paid' : 'pending'
 
     const cookieStore = await cookies()
@@ -28,7 +28,33 @@ export async function GET(req: NextRequest) {
     await supabase.from('orders').update({
       payment_status: paymentStatus,
       status: paymentStatus === 'paid' ? 'assigned' : 'pending',
+      payment_tracking_id: orderTrackingId,
     }).eq('id', orderMerchantReference)
+
+    // Fetch full order to send emails
+    if (paymentStatus === 'paid') {
+      const { data: order } = await supabase
+        .from('orders')
+        .select('*, profiles(full_name, email)')
+        .eq('id', orderMerchantReference)
+        .single()
+
+      if (order) {
+        const profile = order.profiles as { full_name: string; email: string } | null
+        try {
+          // Email admin
+          await sendPaymentReceived(order, profile?.email || '', profile?.full_name || 'Student')
+          // Email admin new order details
+          await sendNewOrderAdmin({ ...order, user_email: profile?.email, user_name: profile?.full_name })
+          // Email client confirmation
+          if (profile?.email) {
+            await sendOrderConfirmation(order, profile.email, profile.full_name)
+          }
+        } catch (e) {
+          console.error('Email error after payment:', e)
+        }
+      }
+    }
 
     return NextResponse.json({ status: paymentStatus, orderTrackingId })
   } catch (error) {
