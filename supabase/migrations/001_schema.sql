@@ -82,3 +82,7 @@ alter table public.orders add column if not exists payment_status text default '
 alter table public.orders add column if not exists payment_tracking_id text;
 alter table public.orders add column if not exists file_url text;
 alter table public.orders add column if not exists file_name text;
+
+-- Add billing contact fields (for guest orders & email fallback)
+alter table public.orders add column if not exists billing_email text;
+alter table public.orders add column if not exists billing_name text;

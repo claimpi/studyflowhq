@@ -150,10 +150,26 @@ export default function OrderPage() {
         status: 'pending',
         payment_status: 'pending',
         user_id: user?.id || null,
+        // Save billing info so emails work even for guest users
+        billing_email: userInfo.email,
+        billing_name: `${userInfo.firstName} ${userInfo.lastName}`,
       }).select().single()
 
       if (orderErr || !order) throw new Error(orderErr?.message || 'Failed to create order')
       setSavedOrderId(order.id)
+
+      // 🔔 Send new order notification to admin + confirmation to client
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'new_order',
+          orderId: order.id,
+          // Pass billing info directly since user may not have a profile yet
+          clientEmail: userInfo.email,
+          clientName: `${userInfo.firstName} ${userInfo.lastName}`,
+        }),
+      }).catch(console.error) // fire-and-forget, don't block payment
 
       // Initiate PesaPal payment
       const payRes = await fetch('/api/pesapal', {
