@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #0B1320;
+  --navy-light: #152035;
+  --cyan: #00E5FF;
+  --cyan-dim: #00b8cc;
+  --silver: #AAB4C0;
+  --green: #39FF88;
+  --white: #F0F4F8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.glow-cyan { box-shadow: 0 0 20px rgba(0,229,255,0.3); }
+.glow-green { box-shadow: 0 0 20px rgba(57,255,136,0.3); }
+
+.gradient-text {
+  background: linear-gradient(135deg, #00E5FF, #39FF88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-glass {
+  background: rgba(21, 32, 53, 0.8);
+  border: 1px solid rgba(0,229,255,0.15);
+  backdrop-filter: blur(12px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00E5FF, #00b8cc);
+  color: #0B1320;
+  font-weight: 700;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 24px rgba(0,229,255,0.4); }
+
+.btn-outline {
+  border: 1.5px solid #00E5FF;
+  color: #00E5FF;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  display: inline-block;
+  cursor: pointer;
+  background: transparent;
+}
+.btn-outline:hover { background: rgba(0,229,255,0.1); }
