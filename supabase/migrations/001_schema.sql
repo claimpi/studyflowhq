@@ -76,3 +76,9 @@ $$;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- Add payment fields to orders
+alter table public.orders add column if not exists payment_status text default 'pending' check (payment_status in ('pending','paid','failed','refunded'));
+alter table public.orders add column if not exists payment_tracking_id text;
+alter table public.orders add column if not exists file_url text;
+alter table public.orders add column if not exists file_name text;

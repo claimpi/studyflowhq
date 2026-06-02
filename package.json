@@ -11,8 +11,13 @@
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.2",
+    "@types/multer": "^2.1.0",
+    "axios": "^1.16.1",
+    "form-data": "^4.0.5",
     "lucide-react": "^1.17.0",
+    "multer": "^2.1.1",
     "next": "16.2.7",
+    "pdf-lib": "^1.17.1",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
