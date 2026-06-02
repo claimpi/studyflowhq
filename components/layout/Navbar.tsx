@@ -61,6 +61,8 @@ export default function Navbar() {
           {[
             { href: '/writers', label: 'Our Writers' },
             { href: '/#how-it-works', label: 'How It Works' },
+          { href: '/pricing', label: 'Pricing' },
+          { href: '/reviews', label: 'Reviews' },
           ].map(l => (
             <Link key={l.href} href={l.href} style={{ color: pathname === l.href ? '#00E5FF' : '#8892a4', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, transition: 'color 0.2s', fontFamily: 'Outfit, sans-serif' }}>{l.label}</Link>
           ))}
