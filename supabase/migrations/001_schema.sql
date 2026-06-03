@@ -86,3 +86,8 @@ alter table public.orders add column if not exists file_name text;
 -- Add billing contact fields (for guest orders & email fallback)
 alter table public.orders add column if not exists billing_email text;
 alter table public.orders add column if not exists billing_name text;
+
+-- Add completed paper delivery fields
+alter table public.orders add column if not exists completed_file_url text;
+alter table public.orders add column if not exists completed_file_name text;
+alter table public.orders add column if not exists completed_at timestamptz;
